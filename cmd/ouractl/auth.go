@@ -1,12 +1,12 @@
-package oura
+package ouractl
 
 import (
 	"fmt"
 	"os"
 	"strings"
 
-	"github.com/hagelstam/oura-cli/internal/api"
-	"github.com/hagelstam/oura-cli/internal/auth"
+	"github.com/hagelstam/ouractl/internal/api"
+	"github.com/hagelstam/ouractl/internal/auth"
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 )

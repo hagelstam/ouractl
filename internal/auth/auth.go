@@ -5,7 +5,7 @@ import (
 	"errors"
 	"os"
 
-	"github.com/hagelstam/oura-cli/internal/config"
+	"github.com/hagelstam/ouractl/internal/config"
 )
 
 type configFile struct {

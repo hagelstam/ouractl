@@ -1,4 +1,4 @@
-package oura
+package ouractl
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"charm.land/log/v2"
 	"github.com/charmbracelet/colorprofile"
 	"github.com/charmbracelet/fang"
-	"github.com/hagelstam/oura-cli/internal/version"
+	"github.com/hagelstam/ouractl/internal/version"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "oura",
+	Use:   "ouractl",
 	Short: "Oura Ring CLI",
 }
 

@@ -1,4 +1,4 @@
-module github.com/hagelstam/oura-cli
+module github.com/hagelstam/ouractl
 
 go 1.26.1
 

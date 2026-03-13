@@ -11,7 +11,7 @@ func Dir() (string, error) {
 		return "", err
 	}
 
-	dir := filepath.Join(configDir, "oura-cli")
+	dir := filepath.Join(configDir, "ouractl")
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return "", err
 	}

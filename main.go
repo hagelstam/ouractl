@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 
-	"github.com/hagelstam/oura-cli/cmd/oura"
+	"github.com/hagelstam/ouractl/cmd/ouractl"
 )
 
 func main() {
-	if err := oura.Execute(); err != nil {
+	if err := ouractl.Execute(); err != nil {
 		os.Exit(1)
 	}
 }
