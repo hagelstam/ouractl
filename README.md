@@ -25,7 +25,7 @@ go install github.com/hagelstam/ouractl@latest
 
 ## Usage
 
-Run `oura --help` for the full list of commands and flags.
+Run `ouractl --help` for the full list of commands and flags.
 
 > [!TIP]
 > Generate a token at [cloud.ouraring.com/personal-access-tokens](https://cloud.ouraring.com/personal-access-tokens).

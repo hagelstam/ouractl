@@ -35,7 +35,7 @@ func LoadToken() (string, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return "", errors.New("not logged in, run `oura auth login`")
+			return "", errors.New("not logged in, run `ouractl auth login`")
 		}
 		return "", err
 	}
@@ -45,7 +45,7 @@ func LoadToken() (string, error) {
 		return "", err
 	}
 	if cfg.AccessToken == "" {
-		return "", errors.New("not logged in, run `oura auth login`")
+		return "", errors.New("not logged in, run `ouractl auth login`")
 	}
 
 	return cfg.AccessToken, nil

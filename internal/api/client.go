@@ -49,7 +49,9 @@ func (c *Client) Get(path string, params url.Values) ([]byte, error) {
 	case http.StatusOK:
 		return body, nil
 	case http.StatusUnauthorized:
-		return nil, fmt.Errorf("unauthorized: token is invalid or expired, run `oura auth login`")
+		return nil, fmt.Errorf(
+			"unauthorized: token is invalid or expired, run `ouractl auth login`",
+		)
 	case http.StatusForbidden:
 		return nil, fmt.Errorf("forbidden: insufficient permissions or expired Oura subscription")
 	case http.StatusTooManyRequests:
