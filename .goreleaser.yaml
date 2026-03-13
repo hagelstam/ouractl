@@ -1,6 +1,6 @@
 version: 2
 
-project_name: oura-cli
+project_name: ouractl
 
 before:
   hooks:
@@ -22,12 +22,12 @@ builds:
       - amd64
       - arm64
     ldflags:
-      - -s -w -X github.com/hagelstam/oura-cli/internal/version.Version={{.Version}}
+      - -s -w -X github.com/hagelstam/ouractl/internal/version.Version={{.Version}}
 
 archives:
   - formats:
       - binary
-    name_template: 'oura-cli_{{ .Tag }}_{{ .Os }}-{{ .Arch }}'
+    name_template: 'ouractl_{{ .Tag }}_{{ .Os }}-{{ .Arch }}'
 checksum:
   name_template: 'checksums.txt'
 snapshot:

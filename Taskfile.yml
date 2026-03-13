@@ -20,7 +20,7 @@ tasks:
   install:
     desc: Install the application
     vars:
-      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/hagelstam/oura-cli/internal/version.Version={{.VERSION}}"{{end}}'
+      LDFLAGS: '{{if .VERSION}}-ldflags="-X github.com/hagelstam/ouractl/internal/version.Version={{.VERSION}}"{{end}}'
     cmds:
       - go install {{.LDFLAGS}} -v .
     sources:

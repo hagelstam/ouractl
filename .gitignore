@@ -1,4 +1,4 @@
 dist/
 debug.log
 coverage.txt
-oura-cli
+./ouractl

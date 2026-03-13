@@ -1,4 +1,4 @@
-package oura
+package ouractl
 
 import (
 	"fmt"
@@ -10,8 +10,8 @@ import (
 	"charm.land/bubbles/v2/table"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/hagelstam/oura-cli/internal/api"
-	"github.com/hagelstam/oura-cli/internal/auth"
+	"github.com/hagelstam/ouractl/internal/api"
+	"github.com/hagelstam/ouractl/internal/auth"
 	"github.com/spf13/cobra"
 )
 
