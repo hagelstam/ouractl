@@ -2,7 +2,6 @@ package ouractl
 
 import (
 	"fmt"
-	"os"
 	"sort"
 	"time"
 
@@ -16,18 +15,7 @@ import (
 
 func fetchReadinessDetail(client *api.Client) func(row table.Row) tea.Cmd {
 	return func(row table.Row) tea.Cmd {
-		return func() tea.Msg {
-			day := row[0]
-			end := tui.NextDay(day)
-
-			data, err := client.GetDailyReadiness(day, end)
-			if err != nil {
-				return tui.DetailData{Err: err}
-			}
-
-			content := renderReadinessDetail(day, data)
-			return tui.DetailData{Content: content}
-		}
+		return fetchReadinessDayDetail(client, row[0])
 	}
 }
 
@@ -162,12 +150,8 @@ var readinessCmd = &cobra.Command{
 			FetchDetail: fetchReadinessDetail(client),
 		})
 
-		if _, err := tea.NewProgram(model).Run(); err != nil {
-			fmt.Fprintln(os.Stderr, "Error running program:", err)
-			os.Exit(1)
-		}
-
-		return nil
+		_, err = tea.NewProgram(model).Run()
+		return err
 	},
 }
 
