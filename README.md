@@ -13,6 +13,10 @@
 <a href="https://goreportcard.com/report/github.com/hagelstam/ouractl"><img src="https://goreportcard.com/badge/github.com/hagelstam/ouractl?style=for-the-badge" alt="GoReportCard"></a>
 </p>
 
+## Screenshot
+
+<img src="screenshot.png" alt="screenshot" width="500"/>
+
 ## Install
 
 ```bash
