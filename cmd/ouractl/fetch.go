@@ -135,7 +135,10 @@ func buildFetchOutput(
 		sort.Slice(dailyReadiness, func(i, j int) bool {
 			return dailyReadiness[i].Day > dailyReadiness[j].Day
 		})
-		infoLines = append(infoLines, fmtInfoLine("Readiness", tui.FmtScore(dailyReadiness[0].Score)))
+		infoLines = append(
+			infoLines,
+			fmtInfoLine("Readiness", tui.FmtScore(dailyReadiness[0].Score)),
+		)
 	}
 
 	// Activity score + steps.
