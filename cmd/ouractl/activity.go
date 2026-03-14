@@ -2,7 +2,6 @@ package ouractl
 
 import (
 	"fmt"
-	"os"
 	"sort"
 	"strconv"
 	"time"
@@ -18,18 +17,7 @@ import (
 
 func fetchActivityDetail(client *api.Client) func(row table.Row) tea.Cmd {
 	return func(row table.Row) tea.Cmd {
-		return func() tea.Msg {
-			day := row[0]
-			end := tui.NextDay(day)
-
-			data, err := client.GetDailyActivity(day, end)
-			if err != nil {
-				return tui.DetailData{Err: err}
-			}
-
-			content := renderActivityDetail(day, data)
-			return tui.DetailData{Content: content}
-		}
+		return fetchActivityDayDetail(client, row[0])
 	}
 }
 
@@ -175,12 +163,8 @@ var activityCmd = &cobra.Command{
 			FetchDetail: fetchActivityDetail(client),
 		})
 
-		if _, err := tea.NewProgram(model).Run(); err != nil {
-			fmt.Fprintln(os.Stderr, "Error running program:", err)
-			os.Exit(1)
-		}
-
-		return nil
+		_, err = tea.NewProgram(model).Run()
+		return err
 	},
 }
 

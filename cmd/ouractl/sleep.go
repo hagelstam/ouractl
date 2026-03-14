@@ -2,7 +2,6 @@ package ouractl
 
 import (
 	"fmt"
-	"os"
 	"sort"
 	"time"
 
@@ -17,23 +16,7 @@ import (
 
 func fetchSleepDetail(client *api.Client) func(row table.Row) tea.Cmd {
 	return func(row table.Row) tea.Cmd {
-		return func() tea.Msg {
-			day := row[0]
-			end := tui.NextDay(day)
-
-			sleeps, err := client.GetSleep(day, end)
-			if err != nil {
-				return tui.DetailData{Err: err}
-			}
-
-			readiness, err := client.GetDailyReadiness(day, end)
-			if err != nil {
-				return tui.DetailData{Err: err}
-			}
-
-			content := renderSleepDetail(day, sleeps, readiness)
-			return tui.DetailData{Content: content}
-		}
+		return fetchSleepDayDetail(client, row[0])
 	}
 }
 
@@ -231,12 +214,8 @@ var sleepCmd = &cobra.Command{
 			FetchDetail: fetchSleepDetail(client),
 		})
 
-		if _, err := tea.NewProgram(model).Run(); err != nil {
-			fmt.Fprintln(os.Stderr, "Error running program:", err)
-			os.Exit(1)
-		}
-
-		return nil
+		_, err = tea.NewProgram(model).Run()
+		return err
 	},
 }
 
