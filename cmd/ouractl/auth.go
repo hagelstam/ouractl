@@ -5,8 +5,10 @@ import (
 	"os"
 	"strings"
 
+	"charm.land/lipgloss/v2"
 	"github.com/hagelstam/ouractl/internal/api"
 	"github.com/hagelstam/ouractl/internal/auth"
+	"github.com/hagelstam/ouractl/internal/tui"
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 )
@@ -20,8 +22,12 @@ var loginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "Log in with an Oura access token",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Generate a token at: https://cloud.ouraring.com/personal-access-tokens")
-		fmt.Print("Paste your access token: ")
+		link := lipgloss.NewStyle().Foreground(tui.Accent).Underline(true).
+			Render("https://cloud.ouraring.com/personal-access-tokens")
+		fmt.Printf("🔑 Generate a token at: %s\n", link)
+
+		prompt := lipgloss.NewStyle().Bold(true).Render("Paste your access token:")
+		fmt.Printf("%s ", prompt)
 
 		raw, err := term.ReadPassword(int(os.Stdin.Fd()))
 		fmt.Println()
@@ -44,7 +50,11 @@ var loginCmd = &cobra.Command{
 			return fmt.Errorf("failed to save token: %w", err)
 		}
 
-		fmt.Println("Logged in successfully.")
+		success := lipgloss.NewStyle().
+			Foreground(tui.Good).
+			Bold(true).
+			Render("✓ Logged in successfully.")
+		fmt.Println(success)
 		return nil
 	},
 }
@@ -56,7 +66,11 @@ var logoutCmd = &cobra.Command{
 		if err := auth.RemoveToken(); err != nil {
 			return fmt.Errorf("failed to remove token: %w", err)
 		}
-		fmt.Println("Logged out.")
+		msg := lipgloss.NewStyle().
+			Foreground(tui.Good).
+			Bold(true).
+			Render("✓ Successfully logged out.")
+		fmt.Println(msg)
 		return nil
 	},
 }
@@ -67,21 +81,26 @@ var statusCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		token, err := auth.LoadToken()
 		if err != nil {
-			fmt.Println("Not logged in.")
+			msg := lipgloss.NewStyle().Foreground(tui.Warn).Render("✗ Not logged in.")
+			fmt.Println(msg)
 			return nil
 		}
 
 		client := api.NewClient(token)
 		info, err := client.GetPersonalInfo()
 		if err != nil {
-			fmt.Println("Logged in, but token is invalid or expired.")
+			msg := lipgloss.NewStyle().
+				Foreground(tui.Warn).
+				Render("⚠ Logged in, but token is invalid or expired.")
+			fmt.Println(msg)
 			return nil
 		}
 
+		check := lipgloss.NewStyle().Foreground(tui.Good).Bold(true)
 		if info.Email != nil && *info.Email != "" {
-			fmt.Printf("Logged in as %s\n", *info.Email)
+			fmt.Printf("%s %s\n", check.Render("✓ Logged in as"), *info.Email)
 		} else {
-			fmt.Println("Logged in.")
+			fmt.Println(check.Render("✓ Logged in."))
 		}
 
 		return nil
