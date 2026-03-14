@@ -1,9 +1,6 @@
 package api
 
-import (
-	"encoding/json"
-	"net/url"
-)
+import "net/url"
 
 type SleepContributors struct {
 	DeepSleep   *int `json:"deep_sleep"`
@@ -23,40 +20,9 @@ type DailySleep struct {
 	Timestamp    string            `json:"timestamp"`
 }
 
-type dailySleepResponse struct {
-	Data      []DailySleep `json:"data"`
-	NextToken *string      `json:"next_token"`
-}
-
 func (c *Client) GetDailySleep(startDate, endDate string) ([]DailySleep, error) {
-	var all []DailySleep
-	var nextToken string
-
-	for {
-		params := url.Values{}
-		params.Set("start_date", startDate)
-		params.Set("end_date", endDate)
-		if nextToken != "" {
-			params.Set("next_token", nextToken)
-		}
-
-		body, err := c.Get("/v2/usercollection/daily_sleep", params)
-		if err != nil {
-			return nil, err
-		}
-
-		var resp dailySleepResponse
-		if err := json.Unmarshal(body, &resp); err != nil {
-			return nil, err
-		}
-
-		all = append(all, resp.Data...)
-
-		if resp.NextToken == nil || *resp.NextToken == "" {
-			break
-		}
-		nextToken = *resp.NextToken
-	}
-
-	return all, nil
+	params := url.Values{}
+	params.Set("start_date", startDate)
+	params.Set("end_date", endDate)
+	return getPaged[DailySleep](c, "/v2/usercollection/daily_sleep", params)
 }

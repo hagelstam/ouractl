@@ -1,8 +1,10 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
+	"maps"
 	"net/http"
 	"net/url"
 	"time"
@@ -59,4 +61,41 @@ func (c *Client) Get(path string, params url.Values) ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("API error (%d): %s", resp.StatusCode, string(body))
 	}
+}
+
+type pagedResponse[T any] struct {
+	Data      []T     `json:"data"`
+	NextToken *string `json:"next_token"`
+}
+
+func getPaged[T any](c *Client, path string, baseParams url.Values) ([]T, error) {
+	var all []T
+	var nextToken string
+
+	for {
+		params := url.Values{}
+		maps.Copy(params, baseParams)
+		if nextToken != "" {
+			params.Set("next_token", nextToken)
+		}
+
+		body, err := c.Get(path, params)
+		if err != nil {
+			return nil, err
+		}
+
+		var resp pagedResponse[T]
+		if err := json.Unmarshal(body, &resp); err != nil {
+			return nil, err
+		}
+
+		all = append(all, resp.Data...)
+
+		if resp.NextToken == nil || *resp.NextToken == "" {
+			break
+		}
+		nextToken = *resp.NextToken
+	}
+
+	return all, nil
 }
