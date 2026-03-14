@@ -71,14 +71,19 @@ var statusCmd = &cobra.Command{
 			return nil
 		}
 
-		// Verify the token still works.
 		client := api.NewClient(token)
-		if _, err := client.Get("/v2/usercollection/personal_info", nil); err != nil {
+		info, err := client.GetPersonalInfo()
+		if err != nil {
 			fmt.Println("Logged in, but token is invalid or expired.")
 			return nil
 		}
 
-		fmt.Println("Logged in.")
+		if info.Email != nil && *info.Email != "" {
+			fmt.Printf("Logged in as %s\n", *info.Email)
+		} else {
+			fmt.Println("Logged in.")
+		}
+
 		return nil
 	},
 }
