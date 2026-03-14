@@ -6,8 +6,13 @@ import (
 	"time"
 )
 
-// NextDay returns the day after the given "YYYY-MM-DD" date string.
-// Falls back to returning the input unchanged on parse error.
+func fmtPtr[T any](v *T, fn func(T) string) string {
+	if v == nil {
+		return "-"
+	}
+	return fn(*v)
+}
+
 func NextDay(day string) string {
 	t, err := time.Parse("2006-01-02", day)
 	if err != nil {
@@ -16,20 +21,39 @@ func NextDay(day string) string {
 	return t.AddDate(0, 0, 1).Format("2006-01-02")
 }
 
-// Tomorrow returns tomorrow's date as "YYYY-MM-DD".
 func Tomorrow() string {
 	return time.Now().AddDate(0, 0, 1).Format("2006-01-02")
 }
 
-// FmtScore formats an optional score integer.
 func FmtScore(v *int) string {
-	if v == nil {
-		return "-"
-	}
-	return strconv.Itoa(*v)
+	return fmtPtr(v, strconv.Itoa)
 }
 
-// FmtDuration formats seconds into "Xh Ym" format.
+func FmtFloat(v *float64) string {
+	return fmtPtr(v, func(f float64) string {
+		return fmt.Sprintf("%.1f", f)
+	})
+}
+
+func FmtPercent(v *int) string {
+	return fmtPtr(v, func(n int) string {
+		return fmt.Sprintf("%d%%", n)
+	})
+}
+
+func FmtDurationPtr(v *int) string {
+	return fmtPtr(v, FmtDuration)
+}
+
+func FmtTemp(v *float64) string {
+	return fmtPtr(v, func(f float64) string {
+		if f >= 0 {
+			return fmt.Sprintf("+%.1f°C", f)
+		}
+		return fmt.Sprintf("%.1f°C", f)
+	})
+}
+
 func FmtDuration(seconds int) string {
 	h := seconds / 3600
 	m := (seconds % 3600) / 60
@@ -39,15 +63,6 @@ func FmtDuration(seconds int) string {
 	return fmt.Sprintf("%dm", m)
 }
 
-// FmtDurationPtr formats an optional duration in seconds.
-func FmtDurationPtr(v *int) string {
-	if v == nil {
-		return "-"
-	}
-	return FmtDuration(*v)
-}
-
-// FmtTime parses an ISO timestamp and returns "HH:MM".
 func FmtTime(isoTimestamp string) string {
 	formats := []string{
 		time.RFC3339,
@@ -63,40 +78,10 @@ func FmtTime(isoTimestamp string) string {
 	return isoTimestamp
 }
 
-// FmtTemp formats an optional temperature deviation.
-func FmtTemp(v *float64) string {
-	if v == nil {
-		return "-"
-	}
-	if *v >= 0 {
-		return fmt.Sprintf("+%.1f°C", *v)
-	}
-	return fmt.Sprintf("%.1f°C", *v)
-}
-
-// FmtDistance formats meters into "X.X km".
 func FmtDistance(meters int) string {
-	km := float64(meters) / 1000.0
-	return fmt.Sprintf("%.1f km", km)
+	return fmt.Sprintf("%.1f km", float64(meters)/1000)
 }
 
-// FmtFloat formats an optional float to one decimal.
-func FmtFloat(v *float64) string {
-	if v == nil {
-		return "-"
-	}
-	return fmt.Sprintf("%.1f", *v)
-}
-
-// FmtPercent formats an optional integer as a percentage.
-func FmtPercent(v *int) string {
-	if v == nil {
-		return "-"
-	}
-	return fmt.Sprintf("%d%%", *v)
-}
-
-// WithUnit appends a unit suffix only when the value is present.
 func WithUnit(formatted, unit string) string {
 	if formatted == "-" {
 		return "-"
@@ -104,7 +89,6 @@ func WithUnit(formatted, unit string) string {
 	return formatted + " " + unit
 }
 
-// ValidateDays checks that days is between 1 and 30.
 func ValidateDays(days int) error {
 	if days < 1 || days > 30 {
 		return fmt.Errorf("flag --days must be between 1 and 30, got %d", days)
