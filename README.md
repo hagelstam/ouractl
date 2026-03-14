@@ -21,7 +21,12 @@ go install github.com/hagelstam/ouractl@latest
 
 ## Features
 
-- **Sleep:** browse daily sleep scores and contributors
+- **Summary**: at-a-glance summary of latest scores, steps and sleep duration
+- **Sleep**: daily scores, duration, vitals, and readiness contributors
+- **Activity**: steps, calories, distance and activity time breakdown
+- **Readiness**: recovery score, temperature trends and contributor details
+- **Ring**: hardware info, firmware and setup date
+- **Auth**: token-based login and status check
 
 ## Usage
 
@@ -30,8 +35,28 @@ Run `ouractl --help` for the full list of commands and flags.
 > [!TIP]
 > Generate a token at [cloud.ouraring.com/personal-access-tokens](https://cloud.ouraring.com/personal-access-tokens).
 
+## Development
+
+### Prerequisites
+
+- [Go](https://go.dev/)
+- [Task](https://taskfile.dev/)
+
+### Running locally
+
+```bash
+task          # run the CLI
+task -- sleep # run CLI with a subcommand (e.g. sleep)
+task debug    # run the CLI with debug logging
+task logs     # tail the debug logs in another terminal window
+```
+
 ## Under the hood
 
 - [cobra](https://github.com/spf13/cobra) for the CLI
 - [bubbletea](https://github.com/charmbracelet/bubbletea) for the TUI
 - [lipgloss](https://github.com/charmbracelet/lipgloss) for the styling
+
+## License
+
+This project is licensed under the terms of the [MIT](https://choosealicense.com/licenses/mit/) license.
