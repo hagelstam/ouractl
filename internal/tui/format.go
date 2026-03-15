@@ -4,7 +4,12 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
+
+var p = message.NewPrinter(language.Finnish)
 
 func fmtPtr[T any](v *T, fn func(T) string) string {
 	if v == nil {
@@ -31,13 +36,13 @@ func FmtScore(v *int) string {
 
 func FmtFloat(v *float64) string {
 	return fmtPtr(v, func(f float64) string {
-		return fmt.Sprintf("%.1f", f)
+		return p.Sprintf("%.1f", f)
 	})
 }
 
 func FmtPercent(v *int) string {
 	return fmtPtr(v, func(n int) string {
-		return fmt.Sprintf("%d%%", n)
+		return p.Sprintf("%d%%", n)
 	})
 }
 
@@ -48,9 +53,9 @@ func FmtDurationPtr(v *int) string {
 func FmtTemp(v *float64) string {
 	return fmtPtr(v, func(f float64) string {
 		if f >= 0 {
-			return fmt.Sprintf("+%.1f°C", f)
+			return "+" + p.Sprintf("%.1f°C", f)
 		}
-		return fmt.Sprintf("%.1f°C", f)
+		return p.Sprintf("%.1f°C", f)
 	})
 }
 
@@ -76,8 +81,16 @@ func FmtTime(isoTimestamp string) string {
 	return isoTimestamp
 }
 
+func FmtSteps(n int) string {
+	return p.Sprintf("%d", n)
+}
+
+func FmtCalories(n int) string {
+	return FmtSteps(n) + " cal"
+}
+
 func FmtDistance(meters int) string {
-	return fmt.Sprintf("%.1f km", float64(meters)/1000)
+	return p.Sprintf("%.1f km", float64(meters)/1000)
 }
 
 func WithUnit(formatted, unit string) string {
