@@ -20,7 +20,7 @@ func fetchSleepDetail(client *api.Client) func(row table.Row) tea.Cmd {
 	}
 }
 
-func renderSleepDetail(day string, sleeps []api.Sleep, readiness []api.DailyReadiness) string {
+func renderSleepDetail(day string, sleeps []api.Sleep) string {
 	title := tui.HeaderStyle.Render(fmt.Sprintf(" Sleep %s", day))
 
 	// Find the longest sleep period.
@@ -55,49 +55,17 @@ func renderSleepDetail(day string, sleeps []api.Sleep, readiness []api.DailyRead
 		{Key: "Latency", Value: tui.FmtDurationPtr(s.Latency)},
 	}, boxWidth)
 
-	topRow := lipgloss.JoinHorizontal(lipgloss.Top, durationBox, " ", vitalsBox)
-
-	var readinessBox string
-	if len(readiness) > 0 {
-		r := readiness[0]
-		readinessBox = tui.RenderBox("Readiness", []tui.KeyValue{
-			{Key: "Score", Value: tui.FmtScore(r.Score)},
-			{Key: "Temp deviation", Value: tui.FmtTemp(r.TemperatureDeviation)},
-			{Key: "Temp trend", Value: tui.FmtTemp(r.TemperatureTrendDeviation)},
-			{Key: "Activity bal.", Value: tui.FmtScore(r.Contributors.ActivityBalance)},
-			{Key: "Body temp", Value: tui.FmtScore(r.Contributors.BodyTemperature)},
-			{Key: "HRV balance", Value: tui.FmtScore(r.Contributors.HRVBalance)},
-			{Key: "Prev. activity", Value: tui.FmtScore(r.Contributors.PreviousDayActivity)},
-			{Key: "Prev. night", Value: tui.FmtScore(r.Contributors.PreviousNight)},
-			{Key: "Recovery", Value: tui.FmtScore(r.Contributors.RecoveryIndex)},
-			{Key: "Resting HR", Value: tui.FmtScore(r.Contributors.RestingHeartRate)},
-			{Key: "Sleep balance", Value: tui.FmtScore(r.Contributors.SleepBalance)},
-		}, boxWidth)
-	}
-
-	result := title + "\n\n" + topRow
-	if readinessBox != "" {
-		result += "\n" + readinessBox
-	}
-
-	return result
+	return title + "\n\n" + lipgloss.JoinHorizontal(lipgloss.Top, durationBox, " ", vitalsBox)
 }
 
 func fetchSleepDayDetail(client *api.Client, day string) tea.Cmd {
 	return func() tea.Msg {
-		end := tui.NextDay(day)
-
-		sleeps, err := client.GetSleep(day, end)
+		sleeps, err := client.GetSleep(day, tui.NextDay(day))
 		if err != nil {
 			return tui.DetailData{Err: err}
 		}
 
-		readiness, err := client.GetDailyReadiness(day, end)
-		if err != nil {
-			return tui.DetailData{Err: err}
-		}
-
-		return tui.DetailData{Content: renderSleepDetail(day, sleeps, readiness)}
+		return tui.DetailData{Content: renderSleepDetail(day, sleeps)}
 	}
 }
 
@@ -119,11 +87,6 @@ func fetchSleepLatestDetail(client *api.Client) tea.Cmd {
 		})
 		day := sleeps[0].Day
 
-		readiness, err := client.GetDailyReadiness(day, tui.NextDay(day))
-		if err != nil {
-			return tui.DetailData{Err: err}
-		}
-
 		var daySleeps []api.Sleep
 		for _, s := range sleeps {
 			if s.Day == day {
@@ -131,7 +94,7 @@ func fetchSleepLatestDetail(client *api.Client) tea.Cmd {
 			}
 		}
 
-		return tui.DetailData{Content: renderSleepDetail(day, daySleeps, readiness)}
+		return tui.DetailData{Content: renderSleepDetail(day, daySleeps)}
 	}
 }
 
