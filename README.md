@@ -15,7 +15,7 @@
 
 ## Screenshot
 
-<img src="screenshot.png" alt="screenshot" width="500"/>
+<img src="screenshot.png" alt="screenshot" width="512"/>
 
 ## Install
 
@@ -25,11 +25,11 @@ go install github.com/hagelstam/ouractl@latest
 
 ## Features
 
-- **Summary**: at-a-glance summary of latest scores, steps and sleep duration
-- **Sleep**: daily scores, duration, vitals, and readiness contributors
-- **Activity**: steps, calories, distance and activity time breakdown
-- **Readiness**: recovery score, temperature trends and contributor details
-- **Ring**: hardware info, firmware and setup date
+- **Summary**: Neofetch style summary of latest scores, steps and sleep duration
+- **Sleep**: browse daily sleep scores, durations, and vitals
+- **Activity**: browse daily steps, calories, distance and activity time breakdowns
+- **Readiness**: browse daily recovery scores, temperature trends and contributor details
+- **Ring**: hardware info, firmware version and setup date
 - **Auth**: token-based login and status check
 
 ## Usage
@@ -52,7 +52,7 @@ Run `ouractl --help` for the full list of commands and flags.
 task          # run the CLI
 task -- sleep # run CLI with a subcommand (e.g. sleep)
 task debug    # run the CLI with debug logging
-task logs     # tail the debug logs in another terminal window
+task logs     # tail the debug logs
 ```
 
 ## Under the hood
