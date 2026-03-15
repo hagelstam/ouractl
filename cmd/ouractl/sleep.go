@@ -60,11 +60,10 @@ func renderSleepDetail(day string, sleeps []api.Sleep) string {
 
 func fetchSleepDayDetail(client *api.Client, day string) tea.Cmd {
 	return func() tea.Msg {
-		sleeps, err := client.GetSleep(day, tui.NextDay(day))
+		sleeps, err := client.GetSleep(tui.PrevDay(day), day)
 		if err != nil {
 			return tui.DetailData{Err: err}
 		}
-
 		return tui.DetailData{Content: renderSleepDetail(day, sleeps)}
 	}
 }
