@@ -194,7 +194,7 @@ func buildFetchOutput(
 	infoLines = append(infoLines, strings.Join(blocks, ""))
 
 	info := strings.Join(infoLines, "\n")
-	return "\n" + lipgloss.JoinHorizontal(lipgloss.Center, art, info) + "\n"
+	return lipgloss.JoinHorizontal(lipgloss.Center, art, info) + "\n"
 }
 
 func fmtInfoLine(label, value string) string {
