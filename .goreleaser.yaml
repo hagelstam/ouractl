@@ -25,9 +25,22 @@ builds:
       - -s -w -X github.com/hagelstam/ouractl/internal/version.Version={{.Version}}
 
 archives:
-  - formats:
-      - binary
+  - id: binaries
+    format: binary
     name_template: 'ouractl_{{ .Tag }}_{{ .Os }}-{{ .Arch }}'
+  - id: tarballs
+    format: tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -64,3 +77,25 @@ changelog:
       order: 400
     - title: Other work
       order: 9999
+
+brews:
+  - ids:
+      - tarballs
+    name: ouractl
+    commit_author:
+      name: hagelstam
+      email: maximilian.hagelstam@gmail.com
+    commit_msg_template: 'Brew formula update for {{ .ProjectName }} version {{ .Tag }}'
+    directory: Formula
+    homepage: 'https://github.com/hagelstam/ouractl'
+    description: 'A command line tool for your Oura Ring data'
+    license: 'MIT'
+    install: |
+      bin.install "ouractl"
+    test: |
+      system "#{bin}/ouractl", "--version"
+    repository:
+      owner: hagelstam
+      name: homebrew-tap
+      branch: main
+      token: '{{ .Env.GITHUB_TOKEN }}'
