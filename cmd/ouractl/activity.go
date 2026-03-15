@@ -3,7 +3,6 @@ package ouractl
 import (
 	"fmt"
 	"sort"
-	"strconv"
 	"time"
 
 	"charm.land/bubbles/v2/table"
@@ -33,11 +32,11 @@ func renderActivityDetail(day string, data []api.DailyActivity) string {
 
 	summaryBox := tui.RenderBox("Summary", []tui.KeyValue{
 		{Key: "Score", Value: tui.FmtScore(a.Score)},
-		{Key: "Steps", Value: strconv.Itoa(a.Steps)},
-		{Key: "Active cal", Value: strconv.Itoa(a.ActiveCalories) + " kcal"},
-		{Key: "Total cal", Value: strconv.Itoa(a.TotalCalories) + " kcal"},
+		{Key: "Steps", Value: tui.FmtSteps(a.Steps)},
+		{Key: "Active cal", Value: tui.FmtCalories(a.ActiveCalories)},
+		{Key: "Total cal", Value: tui.FmtCalories(a.TotalCalories)},
 		{Key: "Walking dist", Value: tui.FmtDistance(a.EquivalentWalkingDistance)},
-		{Key: "Target cal", Value: strconv.Itoa(a.TargetCalories) + " kcal"},
+		{Key: "Target cal", Value: tui.FmtCalories(a.TargetCalories)},
 	}, boxWidth)
 
 	durationBox := tui.RenderBox("Activity Time", []tui.KeyValue{
@@ -140,8 +139,8 @@ var activityCmd = &cobra.Command{
 		columns := []table.Column{
 			{Title: "Date", Width: 12},
 			{Title: "Score", Width: 7},
-			{Title: "Steps", Width: 7},
-			{Title: "Active Cal", Width: 12},
+			{Title: "Steps", Width: 8},
+			{Title: "Active cal", Width: 11},
 			{Title: "Walking Dist", Width: 12},
 		}
 
@@ -150,8 +149,8 @@ var activityCmd = &cobra.Command{
 			rows[i] = table.Row{
 				d.Day,
 				tui.FmtScore(d.Score),
-				strconv.Itoa(d.Steps),
-				strconv.Itoa(d.ActiveCalories) + " kcal",
+				tui.FmtSteps(d.Steps),
+				tui.FmtCalories(d.ActiveCalories),
 				tui.FmtDistance(d.EquivalentWalkingDistance),
 			}
 		}
