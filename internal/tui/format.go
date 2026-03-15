@@ -26,6 +26,14 @@ func NextDay(day string) string {
 	return t.AddDate(0, 0, 1).Format("2006-01-02")
 }
 
+func PrevDay(day string) string {
+	t, err := time.Parse("2006-01-02", day)
+	if err != nil {
+		return day
+	}
+	return t.AddDate(0, 0, -1).Format("2006-01-02")
+}
+
 func Tomorrow() string {
 	return time.Now().AddDate(0, 0, 1).Format("2006-01-02")
 }
