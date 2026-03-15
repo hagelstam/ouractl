@@ -19,9 +19,22 @@
 
 ## Install
 
+### Go
+
 ```bash
 go install github.com/hagelstam/ouractl@latest
 ```
+
+### macOS
+
+```bash
+brew tap hagelstam/tap
+brew install ouractl
+```
+
+### Manual
+
+Download a binary compatible with your system from the [releases tab](https://github.com/hagelstam/ouractl/releases) and install it manually.
 
 ## Features
 
