@@ -19,22 +19,21 @@
 
 ## Install
 
-### Go
+**Go:**
 
-```bash
+```sh
 go install github.com/hagelstam/ouractl@latest
 ```
 
-### macOS
+**Homebrew:**
 
-```bash
-brew tap hagelstam/tap
-brew install ouractl
+```sh
+brew install hagelstam/tap/ouractl
 ```
 
-### Manual
+**Manually:**
 
-Download a binary compatible with your system from the [releases tab](https://github.com/hagelstam/ouractl/releases) and install it manually.
+Download the pre-compiled binaries from the [releases tab](https://github.com/hagelstam/ouractl/releases) or clone the repo build from source.
 
 ## Features
 
@@ -54,14 +53,14 @@ Run `ouractl --help` for the full list of commands and flags.
 
 ## Development
 
-### Prerequisites
+**Prerequisites:**
 
 - [Go](https://go.dev/)
 - [Task](https://taskfile.dev/)
 
-### Running locally
+**Running locally:**
 
-```bash
+```sh
 task          # run the CLI
 task -- sleep # run CLI with a subcommand (e.g. sleep)
 task debug    # run the CLI with debug logging
