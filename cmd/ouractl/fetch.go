@@ -2,7 +2,6 @@ package ouractl
 
 import (
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 
@@ -116,8 +115,8 @@ func buildFetchOutput(
 
 	// Title line.
 	title := "ouractl"
-	if personalInfo != nil && personalInfo.Email != nil {
-		title = *personalInfo.Email
+	if personalInfo != nil && len(personalInfo.ID) >= 8 {
+		title = "oura:" + personalInfo.ID[:8]
 	}
 	infoLines = append(infoLines, tui.HeaderStyle.Render(title))
 	infoLines = append(infoLines, tui.LabelStyle.Render(strings.Repeat("─", 34)))
@@ -147,10 +146,13 @@ func buildFetchOutput(
 			return dailyActivity[i].Day > dailyActivity[j].Day
 		})
 		infoLines = append(infoLines, fmtInfoLine("Activity", tui.FmtScore(dailyActivity[0].Score)))
-		infoLines = append(
-			infoLines,
-			fmtInfoLine("Steps", strconv.Itoa(dailyActivity[0].Steps)),
-		)
+		yesterday := time.Now().AddDate(0, 0, -1).Format("2006-01-02")
+		for _, a := range dailyActivity {
+			if a.Day == yesterday {
+				infoLines = append(infoLines, fmtInfoLine("Steps", tui.FmtSteps(a.Steps)))
+				break
+			}
+		}
 	}
 
 	// Sleep duration (longest sleep period from latest day).
