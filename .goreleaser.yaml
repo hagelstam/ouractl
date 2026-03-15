@@ -26,10 +26,10 @@ builds:
 
 archives:
   - id: binaries
-    format: binary
+    formats: [binary]
     name_template: 'ouractl_{{ .Tag }}_{{ .Os }}-{{ .Arch }}'
   - id: tarballs
-    format: tar.gz
+    formats: [tar.gz]
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
@@ -39,7 +39,7 @@ archives:
       {{- if .Arm }}v{{ .Arm }}{{ end }}
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [zip]
 
 checksum:
   name_template: 'checksums.txt'
