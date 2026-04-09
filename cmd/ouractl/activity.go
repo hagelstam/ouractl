@@ -132,10 +132,6 @@ var activityCmd = &cobra.Command{
 			fmt.Printf("No activity data found for the last %d days.\n", activityDays)
 			return nil
 		}
-		sort.Slice(data, func(i, j int) bool {
-			return data[i].Day > data[j].Day
-		})
-
 		columns := []table.Column{
 			{Title: "Date", Width: 12},
 			{Title: "Score", Width: 7},
@@ -154,6 +150,7 @@ var activityCmd = &cobra.Command{
 				tui.FmtDistance(d.EquivalentWalkingDistance),
 			}
 		}
+		rows = tui.FillDateGaps(rows, startDate, endDate, len(columns))
 
 		model := tui.NewTableModel(tui.TableConfig{
 			Columns:     columns,

@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"time"
 
 	"charm.land/bubbles/v2/spinner"
 	"charm.land/bubbles/v2/table"
@@ -38,6 +39,34 @@ type TableModel struct {
 	spinner spinner.Model
 	state   viewState
 	detail  string
+}
+
+// FillDateGaps ensures every day in [startDate, endDate) has a table row.
+// Missing days get "-" in all columns except the date. Rows are returned newest first.
+func FillDateGaps(rows []table.Row, startDate, endDate string, numColumns int) []table.Row {
+	existing := make(map[string]table.Row, len(rows))
+	for _, row := range rows {
+		existing[row[0]] = row
+	}
+
+	start, _ := time.Parse("2006-01-02", startDate)
+	end, _ := time.Parse("2006-01-02", endDate)
+
+	var result []table.Row
+	for d := end.AddDate(0, 0, -1); !d.Before(start); d = d.AddDate(0, 0, -1) {
+		day := d.Format("2006-01-02")
+		if row, ok := existing[day]; ok {
+			result = append(result, row)
+		} else {
+			row := make(table.Row, numColumns)
+			row[0] = day
+			for j := 1; j < numColumns; j++ {
+				row[j] = "-"
+			}
+			result = append(result, row)
+		}
+	}
+	return result
 }
 
 // NewTableModel creates a new table-detail model from the given config.

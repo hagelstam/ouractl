@@ -122,10 +122,6 @@ var readinessCmd = &cobra.Command{
 			return nil
 		}
 
-		sort.Slice(data, func(i, j int) bool {
-			return data[i].Day > data[j].Day
-		})
-
 		columns := []table.Column{
 			{Title: "Date", Width: 12},
 			{Title: "Score", Width: 7},
@@ -142,6 +138,7 @@ var readinessCmd = &cobra.Command{
 				tui.FmtTemp(d.TemperatureTrendDeviation),
 			}
 		}
+		rows = tui.FillDateGaps(rows, startDate, endDate, len(columns))
 
 		model := tui.NewTableModel(tui.TableConfig{
 			Columns:     columns,

@@ -142,10 +142,6 @@ var sleepCmd = &cobra.Command{
 			return nil
 		}
 
-		sort.Slice(data, func(i, j int) bool {
-			return data[i].Day > data[j].Day
-		})
-
 		columns := []table.Column{
 			{Title: "Date", Width: 12},
 			{Title: "Score", Width: 6},
@@ -168,6 +164,7 @@ var sleepCmd = &cobra.Command{
 				tui.FmtScore(d.Contributors.TotalSleep),
 			}
 		}
+		rows = tui.FillDateGaps(rows, startDate, endDate, len(columns))
 
 		model := tui.NewTableModel(tui.TableConfig{
 			Columns:     columns,
