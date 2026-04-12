@@ -44,6 +44,10 @@ Download the pre-compiled binaries from the [releases tab](https://github.com/ha
 - **Ring**: hardware info, firmware version and setup date
 - **Auth**: token-based login and status check
 
+## Demo
+
+<img src="demo.gif" width="512">
+
 ## Usage
 
 Run `ouractl --help` for the full list of commands and flags.
