@@ -11,14 +11,14 @@ require (
 	github.com/charmbracelet/fang v1.0.0
 	github.com/spf13/cobra v1.10.2
 	golang.org/x/sync v0.20.0
-	golang.org/x/term v0.41.0
-	golang.org/x/text v0.35.0
+	golang.org/x/term v0.42.0
+	golang.org/x/text v0.36.0
 )
 
 require (
 	github.com/charmbracelet/ultraviolet v0.0.0-20260330092749-0f94982c930b // indirect
 	github.com/charmbracelet/x/ansi v0.11.6 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20260406091427-a791e22d5143 // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20260412004207-d48a6f9a4964 // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect
@@ -36,6 +36,6 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/exp v0.0.0-20260312153236-7ab1446f8b90 // indirect
+	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
 	golang.org/x/sys v0.43.0 // indirect
 )
